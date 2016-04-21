@@ -8,7 +8,7 @@ public class JettyTest {
         Server server = new Server(8080);
         ServletContextHandler ctx = new ServletContextHandler();
         server.setHandler(ctx);
-        ctx.addServlet(TestServlet.class, "/");
+        ctx.addServlet(TodoServlet.class, "/");
         server.start();
     }
 }

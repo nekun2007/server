@@ -1,0 +1,16 @@
+<html>
+<head>
+    <meta charset="UTF-8">
+</head>
+<body>
+<form method="POST">
+    Новая задача: <input name="newTask">
+    <input type="submit" value="Добавить">
+</form>
+<ul>
+  #foreach( ${task} in ${allTasks} )
+    <li>$task</li>
+  #end
+</ul>
+</body>
+</html>

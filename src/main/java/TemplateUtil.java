@@ -9,9 +9,7 @@ import java.io.Writer;
 import java.util.Map;
 import java.util.Properties;
 
-/**
- * Created by tmp on 14.04.2016.
- */
+
 public class TemplateUtil {
     static {
         Properties properties = new Properties();
