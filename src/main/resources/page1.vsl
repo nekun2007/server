@@ -1,0 +1,11 @@
+<html>
+<head>
+    <meta charset="UTF-8">
+</head>
+<body>
+<form method="POST">
+    Ваше имя: <input name="name">
+    <input type="submit" value="OK">
+</form>
+</body>
+</html>

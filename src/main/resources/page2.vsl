@@ -1,0 +1,10 @@
+<html>
+<head>
+    <meta charset="UTF-8">
+</head>
+<body>
+<form>
+<h2>Привет, ${username}<h2/>
+</form>
+</body>
+</html>
