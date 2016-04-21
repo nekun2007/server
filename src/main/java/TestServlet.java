@@ -20,6 +20,7 @@ public class TestServlet extends HttpServlet {
         TemplateUtil.render("page1.vsl", data, resp.getWriter());
     }
 
+
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         String name = req.getParameter("name");
