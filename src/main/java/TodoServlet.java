@@ -3,6 +3,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.sql.*;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
@@ -13,14 +14,29 @@ import java.util.Map;
  */
 public class TodoServlet extends HttpServlet {
 
-    private ArrayList<String> tasks = new ArrayList<>();
-
-    protected void outputList (HttpServletResponse resp) throws ServletException, IOException {
+    protected void outputList(HttpServletResponse resp) throws ServletException, IOException {
+        ArrayList<String> tasks = new ArrayList<>();
+        try (Connection conn = DriverManager.getConnection("jdbc:h2:~/test", "sa", "")) {
+            try (PreparedStatement st = conn.prepareStatement("SELECT ID, TEXT FROM TODO ORDER BY ID DESC")) {
+                try (ResultSet rs = st.executeQuery()) {
+                    while (rs.next()) {
+                        int id = rs.getInt(1);
+                        String text = rs.getString(2);
+//                        System.out.println(id + " " + text);
+                        tasks.add(text);
+                    }
+                }
+            }
+        } catch (SQLException e) {
+            throw new ServletException(e);
+        }
         resp.setCharacterEncoding("UTF-8");
-        Map<String, Object> data =new HashMap<>();
+        Map<String, Object> data = new HashMap<>();
         data.put("allTasks", tasks);
         TemplateUtil.render("todo.vsl", data, resp.getWriter());
     }
+
+
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         outputList(resp);
     }
@@ -28,9 +44,17 @@ public class TodoServlet extends HttpServlet {
 
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        String newTask=req.getParameter("newTask");
-        tasks.add(newTask);
-        outputList(resp);
+        String newTask = req.getParameter("newTask");
+//        tasks.add(newTask);
+        try (Connection conn = DriverManager.getConnection("jdbc:h2:~/test", "sa", "")) {
+            try (PreparedStatement st = conn.prepareStatement("INSERT INTO TODO (TEXT) VALUES (?)")) {
+                st.setString(1, newTask);
+                st.execute();
+                outputList(resp);
+
+            }
+        } catch (SQLException e) {
+            throw new ServletException(e);
+        }
     }
 }
-
