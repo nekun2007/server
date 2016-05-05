@@ -7,10 +7,15 @@
     Новая задача: <input name="newTask">
     <input type="submit" value="Добавить">
 </form>
-<ul>
+<ol>
   #foreach( ${task} in ${allTasks} )
-    <li>$task</li>
+    <li>${task.text}
+<form method="POST">
+    <input type="hidden" name="id" value="${task.id}">
+    <input type="submit" value="Завершено">
+    </li>
+</form>
   #end
-</ul>
+</ol>
 </body>
 </html>

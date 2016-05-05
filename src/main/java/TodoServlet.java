@@ -15,7 +15,7 @@ import java.util.Map;
 public class TodoServlet extends HttpServlet {
 
     protected void outputList(HttpServletResponse resp) throws ServletException, IOException {
-        ArrayList<String> tasks = new ArrayList<>();
+        ArrayList<TodoItem> tasks = new ArrayList<>();
         try (Connection conn = DriverManager.getConnection("jdbc:h2:~/test", "sa", "")) {
             try (PreparedStatement st = conn.prepareStatement("SELECT ID, TEXT FROM TODO ORDER BY ID DESC")) {
                 try (ResultSet rs = st.executeQuery()) {
@@ -23,7 +23,7 @@ public class TodoServlet extends HttpServlet {
                         int id = rs.getInt(1);
                         String text = rs.getString(2);
 //                        System.out.println(id + " " + text);
-                        tasks.add(text);
+                        tasks.add(new TodoItem(id, text));
                     }
                 }
             }
@@ -45,14 +45,24 @@ public class TodoServlet extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         String newTask = req.getParameter("newTask");
+        String id = req.getParameter("id");
 //        tasks.add(newTask);
         try (Connection conn = DriverManager.getConnection("jdbc:h2:~/test", "sa", "")) {
-            try (PreparedStatement st = conn.prepareStatement("INSERT INTO TODO (TEXT) VALUES (?)")) {
-                st.setString(1, newTask);
-                st.execute();
-                outputList(resp);
+            if (id !=null) {
+                try (PreparedStatement st = conn.prepareStatement("DELETE FROM TODO WHERE ID = ?")) {
+                    st.setInt(1, Integer.parseInt(id));
+                    st.execute();
+                }
+
+            } else {
+                try (PreparedStatement st = conn.prepareStatement("INSERT INTO TODO (TEXT) VALUES (?)")) {
+                    st.setString(1, newTask);
+                    st.execute();
+                }
 
             }
+            //outputList(resp);
+            resp.sendRedirect("/");
         } catch (SQLException e) {
             throw new ServletException(e);
         }
