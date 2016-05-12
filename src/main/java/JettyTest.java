@@ -12,4 +12,4 @@ public class JettyTest {
         server.start();
     }
 }
-// создание бд джетитест едит конфигуратионз плюсик апликатиеон org.h2.tools.Console name любое
+// создание бд джетитест едит конфигуратионз плюсик апликатиеон org.h2.tools.Console name любое ПА
