@@ -3,14 +3,14 @@
     <meta charset="UTF-8">
 </head>
 <body>
-<form method="POST">
+<form action="/" method="POST">
     Новая задача: <input name="newTask">
     <input type="submit" value="Добавить">
 </form>
 <ol>
   #foreach( ${task} in ${allTasks} )
     <li>${task.text}
-<form method="POST">
+<form action="/" method="POST">
     <input type="hidden" name="id" value="${task.id}">
     <input type="submit" value="Завершено">
     </li>
